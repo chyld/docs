@@ -25,17 +25,19 @@ export async function renderView(id: string): Promise<void> {
   const html = await marked(doc.content);
 
   app.innerHTML = `
-    <div>
-      <a href="/docs/${id}/edit" data-navigo>Edit</a>
+    <div class="view-control">
+      <div class="action-row">
+        <a href="/docs/${id}/edit" data-navigo>Edit</a>
+        <label for="file-input">Files</label>
+        <input type="file" id="file-input" multiple>
+        <button id="upload-btn">Send</button>
+      </div>
       <h1>${doc.title}</h1>
       <div>${html}</div>
-      <hr>
       <h2>Attachments</h2>
       <ul id="attachment-list">
         ${doc.attachments.map(f => `<li><a href="/api/documents/${id}/attachments/${f}">${f}</a></li>`).join('')}
       </ul>
-      <input type="file" id="file-input" multiple>
-      <button id="upload-btn">Upload</button>
     </div>
   `;
 

@@ -113,8 +113,10 @@ a {
 }
 
 .new-control button {
+  font-family: inherit;
+  font-size: 1rem;
   padding: 0.5rem 1rem;
-  background: var(--dark);
+  background: var(--secondary);
   color: var(--bg);
   border: none;
   cursor: pointer;
@@ -164,8 +166,10 @@ a {
 }
 
 .edit-control button {
+  font-family: inherit;
+  font-size: 1rem;
   padding: 0.5rem 1rem;
-  background: var(--dark);
+  background: var(--secondary);
   color: var(--bg);
   border: none;
   cursor: pointer;
@@ -173,4 +177,59 @@ a {
 
 .edit-control button:hover {
   background: var(--primary);
+}
+
+/* View Control ---------------------------------------------------------------------- */
+
+.view-control h1 {
+  color: var(--primary);
+  margin: 0.5rem 0 1rem;
+}
+
+.view-control h2 {
+  color: var(--dark);
+  font-size: 1rem;
+  margin: 2rem 0 0.5rem;
+}
+
+.view-control ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.view-control li {
+  padding: 0.25rem 0;
+}
+
+.view-control li a {
+  font-family: monospace;
+}
+
+.view-control .action-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-control .action-row a,
+.view-control .action-row label,
+.view-control .action-row button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--secondary);
+  color: var(--bg);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.view-control .action-row a:hover,
+.view-control .action-row label:hover,
+.view-control .action-row button:hover {
+  background: var(--primary);
+}
+
+.view-control .action-row input[type="file"] {
+  display: none;
 }
