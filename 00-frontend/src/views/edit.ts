@@ -16,15 +16,20 @@ export async function renderEdit(id: string): Promise<void> {
   const doc = await res.json();
 
   app.innerHTML = `
-    <form id="edit-form">
-      <input type="text" name="title" value="${doc.title}" />
-      <textarea name="content">${doc.content}</textarea>
-      <button type="submit">Save</button>
-    </form>
+    <div class="edit-control">
+      <form id="edit-form">
+        <div class="title-row">
+          <button type="submit">Save</button>
+          <input type="text" name="title" value="${doc.title}" />
+        </div>
+        <textarea name="content">${doc.content}</textarea>
+      </form>
+    </div>
   `;
 
   const form = app.querySelector<HTMLFormElement>('#edit-form');
   const textarea = form?.querySelector<HTMLTextAreaElement>('textarea');
+  textarea?.focus();
 
   textarea?.addEventListener('paste', async (e) => {
     const items = e.clipboardData?.items;

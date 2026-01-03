@@ -123,3 +123,54 @@ a {
 .new-control button:hover {
   background: var(--primary);
 }
+
+/* Edit Control ---------------------------------------------------------------------- */
+
+.edit-control {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-control form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.edit-control input,
+.edit-control textarea {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--accent);
+  background: var(--bg);
+  color: var(--dark);
+}
+
+.edit-control textarea {
+  flex: 1;
+  resize: none;
+}
+
+.edit-control .title-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.edit-control .title-row input {
+  flex: 1;
+}
+
+.edit-control button {
+  padding: 0.5rem 1rem;
+  background: var(--dark);
+  color: var(--bg);
+  border: none;
+  cursor: pointer;
+}
+
+.edit-control button:hover {
+  background: var(--primary);
+}
