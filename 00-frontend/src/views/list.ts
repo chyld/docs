@@ -10,7 +10,7 @@ export async function renderList(): Promise<void> {
   const app = document.querySelector<HTMLDivElement>('#app');
   if (!app) return;
 
-  app.innerHTML = `<div class="list"><p>Loading...</p></div>`;
+  app.innerHTML = `<div><p>Loading...</p></div>`;
 
   const res = await fetch('/api/documents');
   if (!res.ok) return;
@@ -18,8 +18,7 @@ export async function renderList(): Promise<void> {
   const { data }: { data: Doc[] } = await res.json();
 
   app.innerHTML = `
-    <div class="list">
-      <a href="/new" data-navigo class="new">+ New</a>
+    <div>
       ${data.length === 0 ? '<p>No documents</p>' : `
         <ul>
           ${data.map(d => `
