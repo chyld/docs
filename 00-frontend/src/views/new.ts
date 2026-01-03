@@ -5,14 +5,21 @@ export function renderNew(): void {
   if (!app) return;
 
   app.innerHTML = `
-    <form id="doc-form" class="editor">
-      <input type="text" name="title" value="Untitled Document" autofocus />
-      <textarea name="content" placeholder="Write..."></textarea>
-      <button type="submit">Save</button>
-    </form>
+    <div class="new-control">
+      <form id="doc-form">
+        <div class="title-row">
+          <button type="submit">Save</button>
+          <input type="text" name="title" value="Untitled Document" />
+        </div>
+        <textarea name="content" placeholder="Write..." autofocus></textarea>
+      </form>
+    </div>
   `;
 
   const form = app.querySelector<HTMLFormElement>('#doc-form');
+  const textarea = form?.querySelector<HTMLTextAreaElement>('textarea');
+  textarea?.focus();
+
   form?.addEventListener('submit', handleSubmit);
   form?.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 's') {
