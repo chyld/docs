@@ -18,7 +18,7 @@ export async function renderList(): Promise<void> {
   const { data }: { data: Doc[] } = await res.json();
 
   app.innerHTML = `
-    <div>
+    <div class="list-control">
       ${data.length === 0 ? '<p>No documents</p>' : `
         <ul>
           ${data.map(d => `

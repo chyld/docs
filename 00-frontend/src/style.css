@@ -35,3 +35,31 @@ nav a:hover {
 a {
   color: var(--secondary);
 }
+
+/* List Control ---------------------------------------------------------------------- */
+
+.list-control ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-control li {
+  border-bottom: 1px solid var(--accent);
+}
+
+.list-control a {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  text-decoration: none;
+}
+
+.list-control a:hover {
+  color: var(--primary);
+}
+
+.list-control time {
+  color: var(--primary);
+  font-size: 0.875rem;
+}
