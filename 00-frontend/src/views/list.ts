@@ -3,6 +3,7 @@ import { router } from '../router';
 interface Doc {
   id: string;
   title: string;
+  color: string;
   updated_at: string;
 }
 
@@ -24,8 +25,10 @@ export async function renderList(): Promise<void> {
           ${data.map(d => `
             <li>
               <a href="/docs/${d.id}" data-navigo>
-                <span>${d.title}</span>
-                <time>${new Date(d.updated_at).toLocaleDateString()}</time>
+                <span class="doc-color" style="background-color: #${d.color || '606c38'}"></span>
+                <span class="doc-id">${d.id.slice(0, 8)}</span>
+                <span class="doc-title">${d.title}</span>
+                <time class="doc-date">${new Date(d.updated_at).toLocaleDateString()}</time>
               </a>
             </li>
           `).join('')}
