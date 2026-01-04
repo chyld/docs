@@ -95,6 +95,24 @@ export async function renderView(id: string): Promise<void> {
 
   router.updatePageLinks();
 
+  // Add copy buttons to code blocks
+  app.querySelectorAll<HTMLPreElement>('.view-control pre').forEach((pre) => {
+    const btn = document.createElement('button');
+    btn.className = 'code-copy-btn';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', async () => {
+      const code = pre.querySelector('code')?.textContent || pre.textContent || '';
+      await navigator.clipboard.writeText(code);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+    pre.appendChild(btn);
+  });
+
   document.getElementById('upload-btn')?.addEventListener('click', async () => {
     const input = document.getElementById('file-input') as HTMLInputElement;
     const files = input.files;
