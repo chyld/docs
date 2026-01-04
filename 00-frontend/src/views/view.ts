@@ -8,6 +8,19 @@ interface Doc {
   attachments: string[];
 }
 
+const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
+const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.ogg', '.mov'];
+
+function isImage(filename: string): boolean {
+  const lower = filename.toLowerCase();
+  return IMAGE_EXTENSIONS.some(ext => lower.endsWith(ext));
+}
+
+function isVideo(filename: string): boolean {
+  const lower = filename.toLowerCase();
+  return VIDEO_EXTENSIONS.some(ext => lower.endsWith(ext));
+}
+
 export async function renderView(id: string): Promise<void> {
   const app = document.querySelector<HTMLDivElement>('#app');
   if (!app) return;
@@ -35,9 +48,20 @@ export async function renderView(id: string): Promise<void> {
       <h1>${doc.title}</h1>
       <div>${html}</div>
       <h2>Attachments</h2>
-      <ul id="attachment-list">
-        ${doc.attachments.map(f => `<li><a href="/api/documents/${id}/attachments/${f}">${f}</a></li>`).join('')}
-      </ul>
+      <div class="attachment-grid">
+        ${doc.attachments.map(f => {
+          const url = `/api/documents/${id}/attachments/${f}`;
+          let box: string;
+          if (isImage(f)) {
+            box = `<a class="attachment-box" href="${url}"><img src="${url}" alt="${f}" /></a>`;
+          } else if (isVideo(f)) {
+            box = `<div class="attachment-box"><video src="${url}" controls></video></div>`;
+          } else {
+            box = `<a class="attachment-box attachment-file" href="${url}"></a>`;
+          }
+          return `<div class="attachment-item">${box}<span class="attachment-name">${f}</span></div>`;
+        }).join('')}
+      </div>
     </div>
   `;
 

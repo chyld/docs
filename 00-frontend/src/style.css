@@ -180,3 +180,49 @@ a {
 .view-control .action-row input[type="file"] {
   display: none;
 }
+
+/* Attachment Grid ------------------------------------------------------------------- */
+
+.attachment-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.attachment-item {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+}
+
+.attachment-box {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
+  text-decoration: none;
+}
+
+.attachment-box img,
+.attachment-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.attachment-box.attachment-file {
+  background: var(--primary);
+}
+
+.attachment-name {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--dark);
+  margin-top: 0.25rem;
+  word-break: break-all;
+  text-align: center;
+}
