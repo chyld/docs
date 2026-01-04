@@ -108,8 +108,38 @@ a {
   gap: 0.5rem;
 }
 
-.edit-control .title-row input {
+.edit-control .title-row input[name="title"] {
   flex: 1;
+}
+
+.edit-control .color-field {
+  display: flex;
+  gap: 0;
+}
+
+.edit-control .color-field input[type="color"] {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--accent);
+  border-right: none;
+  cursor: pointer;
+  background: none;
+}
+
+.edit-control .color-field input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.edit-control .color-field input[type="color"]::-webkit-color-swatch {
+  border: none;
+}
+
+.edit-control .color-field #color-hex {
+  width: 5rem;
+  font-family: monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .edit-control button {

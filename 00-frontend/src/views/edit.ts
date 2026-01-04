@@ -14,12 +14,17 @@ export async function renderEdit(id: string): Promise<void> {
   }
 
   const doc = await res.json();
+  const initialColor = doc.color || '606c38';
 
   app.innerHTML = `
     <div class="edit-control">
       <form id="edit-form">
         <div class="title-row">
           <button type="submit">Save</button>
+          <div class="color-field">
+            <input type="color" id="color-picker" value="#${initialColor}" />
+            <input type="text" id="color-hex" name="color" value="${initialColor}" maxlength="6" />
+          </div>
           <input type="text" name="title" value="${doc.title}" />
         </div>
         <textarea name="content">${doc.content}</textarea>
@@ -28,6 +33,21 @@ export async function renderEdit(id: string): Promise<void> {
   `;
 
   const form = app.querySelector<HTMLFormElement>('#edit-form');
+  const colorPicker = document.getElementById('color-picker') as HTMLInputElement;
+  const colorHex = document.getElementById('color-hex') as HTMLInputElement;
+
+  colorPicker?.addEventListener('input', () => {
+    colorHex.value = colorPicker.value.slice(1);
+  });
+
+  colorHex?.addEventListener('input', () => {
+    const hex = colorHex.value.replace(/[^0-9a-fA-F]/g, '').slice(0, 6);
+    colorHex.value = hex;
+    if (hex.length === 6) {
+      colorPicker.value = '#' + hex;
+    }
+  });
+
   const textarea = form?.querySelector<HTMLTextAreaElement>('textarea');
   textarea?.focus();
 
@@ -69,11 +89,12 @@ export async function renderEdit(id: string): Promise<void> {
     e.preventDefault();
     const title = (form.elements.namedItem('title') as HTMLInputElement).value;
     const content = (form.elements.namedItem('content') as HTMLTextAreaElement).value;
+    const color = (form.elements.namedItem('color') as HTMLInputElement).value;
 
     await fetch(`/api/documents/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title, content }),
+      body: JSON.stringify({ title, content, color }),
     });
 
     router.navigate(`/docs/${id}`);
