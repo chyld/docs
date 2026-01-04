@@ -4,8 +4,11 @@ import { router } from '../router';
 interface Doc {
   id: string;
   title: string;
+  color: string;
   content: string;
   attachments: string[];
+  created_at: string;
+  updated_at: string;
 }
 
 const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
@@ -37,13 +40,38 @@ export async function renderView(id: string): Promise<void> {
   const doc: Doc = await res.json();
   const html = await marked(doc.content);
 
+  const formatDate = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  };
+  const formatTime = (iso: string) => {
+    const d = new Date(iso);
+    return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  };
+
   app.innerHTML = `
     <div class="view-control">
       <div class="action-row">
-        <a href="/docs/${id}/edit" data-navigo>Edit</a>
-        <label for="file-input">Files</label>
-        <input type="file" id="file-input" multiple>
-        <button id="upload-btn">Send</button>
+        <div class="action-buttons">
+          <a href="/docs/${id}/edit" data-navigo>Edit</a>
+          <label for="file-input">Files</label>
+          <input type="file" id="file-input" multiple>
+          <button id="upload-btn">Send</button>
+        </div>
+        <div class="doc-meta">
+          <span class="meta-color" style="background-color: #${doc.color || '606c38'}"></span>
+          <span class="meta-id">${doc.id.slice(0, 8)}</span>
+          <div class="meta-timestamp">
+            <span class="meta-label">Created</span>
+            <span class="meta-date">${formatDate(doc.created_at)}</span>
+            <span class="meta-time">${formatTime(doc.created_at)}</span>
+          </div>
+          <div class="meta-timestamp">
+            <span class="meta-label">Updated</span>
+            <span class="meta-date">${formatDate(doc.updated_at)}</span>
+            <span class="meta-time">${formatTime(doc.updated_at)}</span>
+          </div>
+        </div>
       </div>
       <h1>${doc.title}</h1>
       <div>${html}</div>

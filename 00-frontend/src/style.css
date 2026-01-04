@@ -218,12 +218,20 @@ a {
 
 .view-control .action-row {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.view-control .action-buttons {
+  display: flex;
   gap: 0.5rem;
 }
 
-.view-control .action-row a,
-.view-control .action-row label,
-.view-control .action-row button {
+.view-control .action-buttons a,
+.view-control .action-buttons label,
+.view-control .action-buttons button {
   font-family: inherit;
   font-size: 1rem;
   padding: 0.5rem 1rem;
@@ -234,14 +242,64 @@ a {
   text-decoration: none;
 }
 
-.view-control .action-row a:hover,
-.view-control .action-row label:hover,
-.view-control .action-row button:hover {
+.view-control .action-buttons a:hover,
+.view-control .action-buttons label:hover,
+.view-control .action-buttons button:hover {
   background: var(--primary);
 }
 
-.view-control .action-row input[type="file"] {
+.view-control .action-buttons input[type="file"] {
   display: none;
+}
+
+.view-control .doc-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.view-control .meta-color {
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.view-control .meta-id {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 12%, transparent);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.view-control .meta-timestamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.view-control .meta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--secondary);
+  opacity: 0.8;
+}
+
+.view-control .meta-date {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.view-control .meta-time {
+  font-size: 0.75rem;
+  font-family: monospace;
+  color: var(--primary);
+  opacity: 0.7;
 }
 
 /* Attachment Grid ------------------------------------------------------------------- */
