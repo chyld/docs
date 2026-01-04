@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: ./00-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: ./01-backend
+    volumes:
+      - ./01-backend/db:/app/db
+      - ./01-backend/docs:/app/docs
