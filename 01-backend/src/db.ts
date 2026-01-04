@@ -1,81 +1,43 @@
 import { Database } from "bun:sqlite";
+import { ok, err, type Result } from "./result";
 import type { Document } from "./types";
 
-const DB_PATH = "db/docs.db";
+const db = new Database("db/docs.db", { strict: true });
 
-let db: Database | null = null;
-
-export function getDb(): Database {
-  if (!db) {
-    db = new Database(DB_PATH, { strict: true });
-  }
-  return db;
-}
-
-// ============================================================
-// Query Functions
-// ============================================================
-
-export function getAllDocs(limit: number, offset: number): { docs: Document[]; total: number } {
-  const database = getDb();
-
-  const docs = database
+export function getAllDocs(limit: number, offset: number): Result<{ docs: Document[]; total: number }> {
+  const docs = db
     .query<Document, [number, number]>(
       "SELECT id, title, color, created_at, updated_at FROM documents ORDER BY updated_at DESC LIMIT ? OFFSET ?"
     )
     .all(limit, offset);
-
-  const countResult = database.query<{ count: number }, []>("SELECT COUNT(*) as count FROM documents").get();
-  const total = countResult?.count ?? 0;
-
-  return { docs, total };
+  const total = db.query<{ count: number }, []>("SELECT COUNT(*) as count FROM documents").get()?.count ?? 0;
+  return ok({ docs, total });
 }
 
-export function getDocById(id: string): Document | null {
-  const database = getDb();
-
-  const doc = database
+export function getDocById(id: string): Result<Document> {
+  const doc = db
     .query<Document, [string]>("SELECT id, title, color, created_at, updated_at FROM documents WHERE id = ?")
     .get(id);
-
-  return doc ?? null;
+  return doc ? ok(doc) : err("Document not found", 404);
 }
 
-export function createDoc(id: string, title: string, color?: string): Document {
-  const database = getDb();
+export function createDoc(id: string, title: string, color?: string): Result<Document> {
+  const query = color
+    ? "INSERT INTO documents (id, title, color, created_at, updated_at) VALUES (?, ?, ?, datetime('now'), datetime('now'))"
+    : "INSERT INTO documents (id, title, created_at, updated_at) VALUES (?, ?, datetime('now'), datetime('now'))";
+  db.query(query).run(...(color ? [id, title, color] : [id, title]));
+  return getDocById(id);
+}
 
-  if (color) {
-    database
-      .query("INSERT INTO documents (id, title, color, created_at, updated_at) VALUES (?, ?, ?, datetime('now'), datetime('now'))")
-      .run(id, title, color);
-  } else {
-    database
-      .query("INSERT INTO documents (id, title, created_at, updated_at) VALUES (?, ?, datetime('now'), datetime('now'))")
-      .run(id, title);
+export function updateDoc(id: string, updates: { title?: string; color?: string; touch?: boolean }): Result<Document> {
+  if (updates.title !== undefined) {
+    db.query("UPDATE documents SET title = ?, updated_at = datetime('now') WHERE id = ?").run(updates.title, id);
   }
-
-  const doc = getDocById(id);
-  if (!doc) {
-    throw new Error("Failed to create document");
+  if (updates.color !== undefined) {
+    db.query("UPDATE documents SET color = ?, updated_at = datetime('now') WHERE id = ?").run(updates.color, id);
   }
-
-  return doc;
-}
-
-export function updateDocTitle(id: string, title: string): void {
-  const database = getDb();
-
-  database.query("UPDATE documents SET title = ?, updated_at = datetime('now') WHERE id = ?").run(title, id);
-}
-
-export function updateDocTimestamp(id: string): void {
-  const database = getDb();
-
-  database.query("UPDATE documents SET updated_at = datetime('now') WHERE id = ?").run(id);
-}
-
-export function updateDocColor(id: string, color: string): void {
-  const database = getDb();
-
-  database.query("UPDATE documents SET color = ?, updated_at = datetime('now') WHERE id = ?").run(color, id);
+  if (updates.touch) {
+    db.query("UPDATE documents SET updated_at = datetime('now') WHERE id = ?").run(id);
+  }
+  return getDocById(id);
 }

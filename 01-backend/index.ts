@@ -5,7 +5,7 @@ import {
   getDocument,
   updateDocument,
   uploadAttachment,
-} from "./src/api";
+} from "./src/handlers";
 
 const server = Bun.serve({
   port: 3000,

@@ -1,16 +1,21 @@
 import { z } from "zod";
 
-// ============================================================
-// Zod Schemas for Input Validation
-// ============================================================
-
+// Schemas
 export const UuidSchema = z.string().uuid();
-
 export const ColorSchema = z.string().regex(/^[0-9a-fA-F]{6}$/, "Invalid hex color");
+export const FilenameSchema = z.string().min(1).max(255).refine(
+  (n) => !n.includes("/") && !n.includes("\\") && !n.includes(".."),
+  { message: "Invalid filename" }
+);
+
+export const PaginationSchema = z.object({
+  limit: z.coerce.number().int().min(1).max(100).default(50),
+  offset: z.coerce.number().int().min(0).default(0),
+});
 
 export const CreateDocumentSchema = z.object({
   title: z.string().min(1, "Title is required").max(255, "Title too long"),
-  content: z.string().optional().default(""),
+  content: z.string().default(""),
   color: ColorSchema.optional(),
 });
 
@@ -20,64 +25,24 @@ export const UpdateDocumentSchema = z.object({
   color: ColorSchema.optional(),
 });
 
-export const PaginationSchema = z.object({
-  limit: z.coerce.number().int().min(1).max(100).optional().default(50),
-  offset: z.coerce.number().int().min(0).optional().default(0),
-});
-
-// Filename must not contain path traversal characters
-export const FilenameSchema = z
-  .string()
-  .min(1)
-  .max(255)
-  .refine((name) => !name.includes("/") && !name.includes("\\") && !name.includes(".."), {
-    message: "Invalid filename",
-  });
-
-// ============================================================
-// TypeScript Types (derived from schemas)
-// ============================================================
-
-export type CreateDocumentInput = z.infer<typeof CreateDocumentSchema>;
-export type UpdateDocumentInput = z.infer<typeof UpdateDocumentSchema>;
-export type PaginationInput = z.infer<typeof PaginationSchema>;
-
-// ============================================================
-// Database Row Types
-// ============================================================
-
-export interface Document {
+// Types
+export type Document = {
   id: string;
   title: string;
   color: string;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface DocumentWithContent extends Document {
+export type DocumentWithContent = Document & {
   content: string;
   attachments: string[];
-}
+};
 
-export interface AttachmentInfo {
+export type AttachmentInfo = {
   filename: string;
   size: number;
   type: string;
-}
+};
 
-// ============================================================
-// API Response Types
-// ============================================================
-
-export interface ErrorResponse {
-  error: string;
-}
-
-export interface PaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    limit: number;
-    offset: number;
-    total: number;
-  };
-}
+export type Pagination = { limit: number; offset: number; total: number };
