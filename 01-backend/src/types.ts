@@ -6,14 +6,18 @@ import { z } from "zod";
 
 export const UuidSchema = z.string().uuid();
 
+export const ColorSchema = z.string().regex(/^[0-9a-fA-F]{6}$/, "Invalid hex color");
+
 export const CreateDocumentSchema = z.object({
   title: z.string().min(1, "Title is required").max(255, "Title too long"),
   content: z.string().optional().default(""),
+  color: ColorSchema.optional(),
 });
 
 export const UpdateDocumentSchema = z.object({
   title: z.string().min(1).max(255).optional(),
   content: z.string().optional(),
+  color: ColorSchema.optional(),
 });
 
 export const PaginationSchema = z.object({
@@ -45,6 +49,7 @@ export type PaginationInput = z.infer<typeof PaginationSchema>;
 export interface Document {
   id: string;
   title: string;
+  color: string;
   created_at: string;
   updated_at: string;
 }

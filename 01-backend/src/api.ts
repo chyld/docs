@@ -13,7 +13,7 @@ import {
   type DocumentWithContent,
   type ErrorResponse,
 } from "./types";
-import { createDoc, getAllDocs, getDocById, updateDocTimestamp, updateDocTitle } from "./db";
+import { createDoc, getAllDocs, getDocById, updateDocColor, updateDocTimestamp, updateDocTitle } from "./db";
 
 const DOCS_DIR = resolve("docs");
 
@@ -119,7 +119,7 @@ export async function createDocument(req: Request): Promise<Response> {
       return errorResponse(message, 400);
     }
 
-    const { title, content } = parsed.data;
+    const { title, content, color } = parsed.data;
     const id = randomUUID();
     const docDir = join(DOCS_DIR, id);
     const attachmentsDir = join(docDir, "attachments");
@@ -131,7 +131,7 @@ export async function createDocument(req: Request): Promise<Response> {
     await writeFile(join(docDir, "document.md"), content);
 
     // Insert metadata into database
-    const doc = createDoc(id, title);
+    const doc = createDoc(id, title, color);
 
     return Response.json(doc, { status: 201 });
   } catch (error) {
@@ -167,7 +167,7 @@ export async function updateDocument(req: BunRequest<"/api/documents/:id">): Pro
       return errorResponse(message, 400);
     }
 
-    const { title, content } = parsed.data;
+    const { title, content, color } = parsed.data;
 
     if (title !== undefined) {
       updateDocTitle(id, title);
@@ -176,6 +176,10 @@ export async function updateDocument(req: BunRequest<"/api/documents/:id">): Pro
     if (content !== undefined) {
       await writeFile(join(DOCS_DIR, id, "document.md"), content);
       updateDocTimestamp(id);
+    }
+
+    if (color !== undefined) {
+      updateDocColor(id, color);
     }
 
     const updatedDoc = getDocById(id);
