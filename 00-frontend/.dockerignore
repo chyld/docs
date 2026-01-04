@@ -1,0 +1,7 @@
+.dockerignore
+.gitignore
+Dockerfile
+bun.lock
+node_modules
+scripts
+

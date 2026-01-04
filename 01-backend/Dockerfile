@@ -1,7 +1,8 @@
 FROM oven/bun:1
 WORKDIR /app
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
 COPY . .
+RUN ls -al; bun install; ls -al
+RUN mkdir -p db docs
 EXPOSE 3000
 CMD ["bun", "run", "index.ts"]
+

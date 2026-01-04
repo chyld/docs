@@ -1,13 +1,13 @@
 services:
   frontend:
-    build: ./00-frontend
+    image: docs:frontend
     ports:
       - "8080:80"
     depends_on:
       - backend
 
   backend:
-    build: ./01-backend
+    image: docs:backend
     volumes:
-      - ./01-backend/db:/app/db
-      - ./01-backend/docs:/app/docs
+      - ./db:/app/db
+      - ./docs:/app/docs
