@@ -73,59 +73,6 @@ a {
   font-size: 0.875rem;
 }
 
-/* New Control ----------------------------------------------------------------------- */
-
-.new-control {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.new-control form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.new-control input,
-.new-control textarea {
-  font-family: inherit;
-  font-size: 1rem;
-  padding: 0.5rem;
-  border: 1px solid var(--accent);
-  background: var(--bg);
-  color: var(--dark);
-}
-
-.new-control textarea {
-  flex: 1;
-  resize: none;
-}
-
-.new-control .title-row {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.new-control .title-row input {
-  flex: 1;
-}
-
-.new-control button {
-  font-family: inherit;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  background: var(--secondary);
-  color: var(--bg);
-  border: none;
-  cursor: pointer;
-}
-
-.new-control button:hover {
-  background: var(--primary);
-}
-
 /* Edit Control ---------------------------------------------------------------------- */
 
 .edit-control {

@@ -1,6 +1,5 @@
 import Navigo from 'navigo';
 import { renderList } from './views/list';
-import { renderNew } from './views/new';
 import { renderView } from './views/view';
 import { renderEdit } from './views/edit';
 
@@ -10,9 +9,6 @@ export function initRouter(): void {
   router
     .on('/', () => {
       renderList();
-    })
-    .on('/new', () => {
-      renderNew();
     })
     .on('/docs/:id', (match) => {
       const id = match?.data?.id;
