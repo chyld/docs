@@ -8,6 +8,7 @@ services:
 
   backend:
     image: docs:backend
+    user: "${DUID}:${DGID}"
     volumes:
       - ./db:/app/db
       - ./docs:/app/docs
