@@ -80,6 +80,7 @@ export async function renderView(id: string): Promise<void> {
       </div>
       <h1>${doc.title}</h1>
       <div>${html}</div>
+      ${doc.attachments.length > 0 ? `
       <h2>Attachments</h2>
       <div class="attachment-grid">
         ${doc.attachments.map(f => {
@@ -95,6 +96,7 @@ export async function renderView(id: string): Promise<void> {
           return `<div class="attachment-item">${box}<span class="attachment-name">${f}</span></div>`;
         }).join('')}
       </div>
+      ` : ''}
     </div>
   `;
 
