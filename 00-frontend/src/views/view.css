@@ -2,13 +2,53 @@
 
 .view-control h1 {
   color: var(--primary);
+  font-size: 2.25rem;
   margin: 0.5rem 0 1rem;
 }
 
 .view-control h2 {
   color: var(--dark);
-  font-size: 1rem;
+  font-size: 1.75rem;
   margin: 2rem 0 0.5rem;
+}
+
+.view-control h3 {
+  color: var(--dark);
+  font-size: 1.5rem;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.view-control h4 {
+  color: var(--dark);
+  font-size: 1.25rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.view-control h5 {
+  color: var(--dark);
+  font-size: 1.1rem;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.view-control h6 {
+  color: var(--dark);
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.view-control blockquote {
+  margin: 1rem 0;
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  border-left: 4px solid var(--accent);
+  color: color-mix(in srgb, var(--dark) 75%, transparent);
+}
+
+.view-control blockquote blockquote {
+  margin: 0.75rem 0;
+}
+
+.view-control blockquote p {
+  margin: 0;
 }
 
 .view-control ul {
