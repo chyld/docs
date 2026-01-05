@@ -1,4 +1,17 @@
-import { describe, test, expect } from "bun:test"
+import { describe, test, expect, beforeEach } from "bun:test"
+import { Database } from "bun:sqlite"
+import { rm, readdir } from "fs/promises"
+import { join } from "path"
+
+const cleanDatabase = async () => {
+  const db = new Database("db/docs.db", { strict: true })
+  db.run("DELETE FROM documents")
+  db.close()
+
+  const docsDir = "docs"
+  const entries = await readdir(docsDir).catch(() => [])
+  await Promise.all(entries.map((entry) => rm(join(docsDir, entry), { recursive: true, force: true })))
+}
 
 interface DocumentResponse {
   id: string
@@ -16,9 +29,14 @@ interface DocumentWithNavigation extends DocumentResponse {
 
 const BASE_URL = "http://localhost:3000"
 
+// SQLite datetime('now') has second-level precision, so we need 1+ second between creates
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe("Previous/Next navigation", () => {
+  beforeEach(async () => {
+    await cleanDatabase()
+  })
+
   test("returns prev_id and next_id fields", async () => {
     const res = await fetch(`${BASE_URL}/api/documents`, {
       method: "POST",
@@ -43,7 +61,7 @@ describe("Previous/Next navigation", () => {
     })
     const doc1 = (await doc1Res.json()) as DocumentResponse
 
-    await sleep(50)
+    await sleep(1100)
 
     const doc2Res = await fetch(`${BASE_URL}/api/documents`, {
       method: "POST",
@@ -52,7 +70,7 @@ describe("Previous/Next navigation", () => {
     })
     const doc2 = (await doc2Res.json()) as DocumentResponse
 
-    await sleep(50)
+    await sleep(1100)
 
     const doc3Res = await fetch(`${BASE_URL}/api/documents`, {
       method: "POST",
@@ -94,7 +112,7 @@ describe("Previous/Next navigation", () => {
     })
     const docA = (await docARes.json()) as DocumentResponse
 
-    await sleep(50)
+    await sleep(1100)
 
     const docBRes = await fetch(`${BASE_URL}/api/documents`, {
       method: "POST",
@@ -109,7 +127,7 @@ describe("Previous/Next navigation", () => {
     const fullB1 = (await getB1.json()) as DocumentWithNavigation
     expect(fullB1.next_id).toBe(docA.id)
 
-    await sleep(50)
+    await sleep(1100)
 
     // Update docA to make it newer
     await fetch(`${BASE_URL}/api/documents/${docA.id}`, {
