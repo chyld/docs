@@ -1,5 +1,6 @@
 import { marked } from 'marked';
 import { router } from '../router';
+import './view.css';
 
 interface Doc {
   id: string;
