@@ -126,6 +126,21 @@
   background: var(--primary);
 }
 
+.view-control .action-buttons a.nav-btn {
+  background: var(--primary);
+}
+
+.view-control .action-buttons a.nav-btn:hover {
+  background: var(--dark);
+}
+
+.view-control .action-buttons a.nav-btn.disabled {
+  background: color-mix(in srgb, var(--dark) 30%, transparent);
+  color: color-mix(in srgb, var(--bg) 60%, transparent);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .view-control .action-buttons input[type="file"] {
   display: none;
 }

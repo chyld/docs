@@ -1,7 +1,7 @@
 import type { BunRequest } from "bun";
 import { randomUUID } from "crypto";
 import { err, toResponse, toResponseCreated } from "./result";
-import { createDoc, getAllDocs, getDocById, updateDoc } from "./db";
+import { createDoc, getAllDocs, getDocById, getDocNeighbors, updateDoc } from "./db";
 import { createDocDir, getAttachmentFile, listAttachments, readContent, saveAttachment, writeContent } from "./storage";
 import { CreateDocumentSchema, FilenameSchema, PaginationSchema, UpdateDocumentSchema, UuidSchema } from "./types";
 
@@ -43,7 +43,10 @@ export async function getDocument(req: BunRequest<"/api/documents/:id">): Promis
   const attachments = await listAttachments(id.data);
   if (!content.ok || !attachments.ok) return toResponse(err("Failed to read document", 500));
 
-  return Response.json({ ...doc.data, content: content.data, attachments: attachments.data });
+  const neighbors = getDocNeighbors(id.data);
+  const { prev_id, next_id } = neighbors.ok ? neighbors.data : { prev_id: null, next_id: null };
+
+  return Response.json({ ...doc.data, content: content.data, attachments: attachments.data, prev_id, next_id });
 }
 
 export async function createDocument(req: Request): Promise<Response> {

@@ -10,6 +10,8 @@ interface Doc {
   attachments: string[];
   created_at: string;
   updated_at: string;
+  prev_id: string | null;
+  next_id: string | null;
 }
 
 const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'];
@@ -58,6 +60,8 @@ export async function renderView(id: string): Promise<void> {
           <label for="file-input">Files</label>
           <input type="file" id="file-input" multiple>
           <button id="upload-btn">Send</button>
+          <a href="${doc.prev_id ? `/docs/${doc.prev_id}` : '#'}" data-navigo class="nav-btn${doc.prev_id ? '' : ' disabled'}">Prev</a>
+          <a href="${doc.next_id ? `/docs/${doc.next_id}` : '#'}" data-navigo class="nav-btn${doc.next_id ? '' : ' disabled'}">Next</a>
         </div>
         <div class="doc-meta">
           <span class="meta-color" style="background-color: #${doc.color || '606c38'}"></span>

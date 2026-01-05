@@ -41,3 +41,27 @@ export function updateDoc(id: string, updates: { title?: string; color?: string;
   }
   return getDocById(id);
 }
+
+export function getDocNeighbors(id: string): Result<{ prev_id: string | null; next_id: string | null }> {
+  const doc = db
+    .query<{ updated_at: string }, [string]>("SELECT updated_at FROM documents WHERE id = ?")
+    .get(id);
+  if (!doc) return err("Document not found", 404);
+
+  // Previous = newer document (updated_at > current), closest one (smallest of those greater)
+  // Handle tie-breaker with id for documents with same updated_at
+  const prev = db
+    .query<{ id: string }, [string, string]>(
+      "SELECT id FROM documents WHERE updated_at > ?1 OR (updated_at = ?1 AND id > ?2) ORDER BY updated_at ASC, id ASC LIMIT 1"
+    )
+    .get(doc.updated_at, id);
+
+  // Next = older document (updated_at < current), closest one (largest of those smaller)
+  const next = db
+    .query<{ id: string }, [string, string]>(
+      "SELECT id FROM documents WHERE updated_at < ?1 OR (updated_at = ?1 AND id < ?2) ORDER BY updated_at DESC, id DESC LIMIT 1"
+    )
+    .get(doc.updated_at, id);
+
+  return ok({ prev_id: prev?.id ?? null, next_id: next?.id ?? null });
+}
