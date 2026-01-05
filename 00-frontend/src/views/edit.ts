@@ -16,6 +16,10 @@ export async function renderEdit(id: string): Promise<void> {
   const doc = await res.json();
   const initialColor = doc.color || '606c38';
 
+  // Clear nav title
+  const navTitle = document.getElementById('nav-title');
+  if (navTitle) navTitle.textContent = '';
+
   app.innerHTML = `
     <div class="edit-control">
       <form id="edit-form">

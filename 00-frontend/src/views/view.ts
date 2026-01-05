@@ -78,7 +78,6 @@ export async function renderView(id: string): Promise<void> {
           </div>
         </div>
       </div>
-      <h1>${doc.title}</h1>
       <div>${html}</div>
       ${doc.attachments.length > 0 ? `
       <h2>Attachments</h2>
@@ -101,6 +100,10 @@ export async function renderView(id: string): Promise<void> {
   `;
 
   router.updatePageLinks();
+
+  // Set nav title
+  const navTitle = document.getElementById('nav-title');
+  if (navTitle) navTitle.textContent = doc.title;
 
   // Add copy buttons to code blocks
   app.querySelectorAll<HTMLPreElement>('.view-control pre').forEach((pre) => {

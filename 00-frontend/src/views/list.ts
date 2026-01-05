@@ -18,6 +18,10 @@ export async function renderList(): Promise<void> {
 
   const { data }: { data: Doc[] } = await res.json();
 
+  // Clear nav title
+  const navTitle = document.getElementById('nav-title');
+  if (navTitle) navTitle.textContent = '';
+
   app.innerHTML = `
     <div class="list-control">
       ${data.length === 0 ? '<p>No documents</p>' : `
