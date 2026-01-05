@@ -1,5 +1,6 @@
 import {
   createDocument,
+  deleteDocument,
   getAllDocuments,
   getAttachment,
   getDocument,
@@ -18,6 +19,7 @@ const server = Bun.serve({
     "/api/documents/:id": {
       GET: getDocument,
       PUT: updateDocument,
+      DELETE: deleteDocument,
     },
     "/api/documents/:id/attachments": {
       POST: uploadAttachment,

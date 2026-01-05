@@ -1,8 +1,8 @@
 import type { BunRequest } from "bun";
 import { randomUUID } from "crypto";
 import { err, toResponse, toResponseCreated } from "./result";
-import { createDoc, getAllDocs, getDocById, getDocNeighbors, updateDoc } from "./db";
-import { createDocDir, getAttachmentFile, listAttachments, readContent, saveAttachment, writeContent } from "./storage";
+import { createDoc, deleteDoc, getAllDocs, getDocById, getDocNeighbors, updateDoc } from "./db";
+import { createDocDir, deleteDocDir, getAttachmentFile, listAttachments, readContent, saveAttachment, writeContent } from "./storage";
 import { CreateDocumentSchema, FilenameSchema, PaginationSchema, UpdateDocumentSchema, UuidSchema } from "./types";
 
 const parseJson = async (req: Request) => {
@@ -126,4 +126,15 @@ export async function getAttachment(req: BunRequest<"/api/documents/:id/attachme
 
   if (!(await file.data.exists())) return toResponse(err("Attachment not found", 404));
   return new Response(file.data);
+}
+
+export async function deleteDocument(req: BunRequest<"/api/documents/:id">): Promise<Response> {
+  const id = UuidSchema.safeParse(req.params.id);
+  if (!id.success) return toResponse(err("Invalid document ID", 400));
+
+  const result = deleteDoc(id.data);
+  if (!result.ok) return toResponse(result);
+
+  await deleteDocDir(id.data);
+  return Response.json({ success: true });
 }

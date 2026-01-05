@@ -1,4 +1,4 @@
-import { mkdir, readdir, writeFile } from "fs/promises";
+import { mkdir, readdir, rm, writeFile } from "fs/promises";
 import { join, resolve, sep } from "path";
 import { randomUUID } from "crypto";
 import { ok, err, type Result } from "./result";
@@ -45,4 +45,9 @@ export function getAttachmentFile(id: string, filename: string): Result<ReturnTy
   const dir = join(DOCS_DIR, id, "attachments");
   if (!isPathSafe(dir, filename)) return err("Invalid path", 400);
   return ok(Bun.file(join(dir, filename)));
+}
+
+export async function deleteDocDir(id: string): Promise<Result<void>> {
+  await rm(join(DOCS_DIR, id), { recursive: true, force: true });
+  return ok(undefined);
 }

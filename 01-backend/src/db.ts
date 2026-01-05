@@ -65,3 +65,17 @@ export function getDocNeighbors(id: string): Result<{ prev_id: string | null; ne
 
   return ok({ prev_id: prev?.id ?? null, next_id: next?.id ?? null });
 }
+
+export function deleteDoc(id: string): Result<void> {
+  const doc = db
+    .query<{ created_at: string; updated_at: string }, [string]>(
+      "SELECT created_at, updated_at FROM documents WHERE id = ?"
+    )
+    .get(id);
+
+  if (!doc) return err("Document not found", 404);
+  if (doc.created_at !== doc.updated_at) return err("Cannot delete edited document", 409);
+
+  db.query("DELETE FROM documents WHERE id = ?").run(id);
+  return ok(undefined);
+}

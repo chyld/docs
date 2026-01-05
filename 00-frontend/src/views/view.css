@@ -141,6 +141,14 @@
   pointer-events: none;
 }
 
+.view-control .action-buttons .delete-btn {
+  background: #a63d40;
+}
+
+.view-control .action-buttons .delete-btn:hover {
+  background: #8b3234;
+}
+
 .view-control .action-buttons input[type="file"] {
   display: none;
 }

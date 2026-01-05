@@ -62,6 +62,7 @@ export async function renderView(id: string): Promise<void> {
           <button id="upload-btn">Send</button>
           <a href="${doc.prev_id ? `/docs/${doc.prev_id}` : '#'}" data-navigo class="nav-btn${doc.prev_id ? '' : ' disabled'}">Prev</a>
           <a href="${doc.next_id ? `/docs/${doc.next_id}` : '#'}" data-navigo class="nav-btn${doc.next_id ? '' : ' disabled'}">Next</a>
+          ${doc.created_at === doc.updated_at ? '<button id="delete-btn" class="delete-btn">Delete</button>' : ''}
         </div>
         <div class="doc-meta">
           <span class="meta-color" style="background-color: #${doc.color || '606c38'}"></span>
@@ -135,5 +136,17 @@ export async function renderView(id: string): Promise<void> {
     }
 
     renderView(id);
+  });
+
+  document.getElementById('delete-btn')?.addEventListener('click', async () => {
+    const res = await fetch(`/api/documents/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      router.navigate('/');
+    } else if (res.status === 409) {
+      alert('Cannot delete - document has been edited');
+    } else {
+      const body = await res.json();
+      alert(body.error || 'Failed to delete document');
+    }
   });
 }
