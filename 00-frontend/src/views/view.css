@@ -52,17 +52,46 @@
 }
 
 .view-control ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1rem;
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.view-control ul ul {
+  list-style: circle;
+  margin: 0.25rem 0;
+}
+
+.view-control ul ul ul {
+  list-style: square;
 }
 
 .view-control li {
-  padding: 0.25rem 0;
+  padding: 0.2rem 0;
+  line-height: 1.5;
 }
 
-.view-control li a {
-  font-family: monospace;
+.view-control table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.view-control th,
+.view-control td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.view-control th {
+  font-weight: 700;
+  color: var(--primary);
+  border-bottom: 2px solid var(--accent);
+}
+
+.view-control tr:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .view-control .action-row {
