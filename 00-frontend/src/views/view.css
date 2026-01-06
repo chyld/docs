@@ -149,6 +149,22 @@
   background: #8b3234;
 }
 
+.view-control .action-buttons .pin-btn {
+  background: var(--primary);
+}
+
+.view-control .action-buttons .pin-btn:hover {
+  background: var(--dark);
+}
+
+.view-control .action-buttons .pin-btn.pinned {
+  background: var(--accent);
+}
+
+.view-control .action-buttons .pin-btn.pinned:hover {
+  background: var(--secondary);
+}
+
 .view-control .action-buttons input[type="file"] {
   display: none;
 }

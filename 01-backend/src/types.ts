@@ -17,12 +17,14 @@ export const CreateDocumentSchema = z.object({
   title: z.string().min(1, "Title is required").max(255, "Title too long"),
   content: z.string().default(""),
   color: ColorSchema.optional(),
+  pinned: z.boolean().optional(),
 });
 
 export const UpdateDocumentSchema = z.object({
   title: z.string().min(1).max(255).optional(),
   content: z.string().optional(),
   color: ColorSchema.optional(),
+  pinned: z.boolean().optional(),
 });
 
 // Types
@@ -30,6 +32,7 @@ export type Document = {
   id: string;
   title: string;
   color: string;
+  pinned: number;
   created_at: string;
   updated_at: string;
 };

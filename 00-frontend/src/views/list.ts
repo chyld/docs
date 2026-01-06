@@ -4,6 +4,7 @@ interface Doc {
   id: string;
   title: string;
   color: string;
+  pinned: number;
   updated_at: string;
 }
 
@@ -32,6 +33,7 @@ export async function renderList(): Promise<void> {
                 <span class="doc-color" style="background-color: #${d.color || '606c38'}"></span>
                 <span class="doc-id">${d.id.slice(0, 8)}</span>
                 <span class="doc-title">${d.title}</span>
+                ${d.pinned ? '<span class="doc-pin">⦿</span>' : ''}
                 <time class="doc-date">${new Date(d.updated_at).toLocaleDateString()}</time>
               </a>
             </li>

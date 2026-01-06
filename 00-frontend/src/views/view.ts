@@ -6,6 +6,7 @@ interface Doc {
   id: string;
   title: string;
   color: string;
+  pinned: number;
   content: string;
   attachments: string[];
   created_at: string;
@@ -57,6 +58,7 @@ export async function renderView(id: string): Promise<void> {
       <div class="action-row">
         <div class="action-buttons">
           <a href="/docs/${id}/edit" data-navigo>Edit</a>
+          <button id="pin-btn" class="pin-btn${doc.pinned ? ' pinned' : ''}">${doc.pinned ? 'Unpin' : 'Pin'}</button>
           <label for="file-input">Files</label>
           <input type="file" id="file-input" multiple>
           <button id="upload-btn">Send</button>
@@ -147,6 +149,18 @@ export async function renderView(id: string): Promise<void> {
     } else {
       const body = await res.json();
       alert(body.error || 'Failed to delete document');
+    }
+  });
+
+  document.getElementById('pin-btn')?.addEventListener('click', async () => {
+    const newPinned = !doc.pinned;
+    const res = await fetch(`/api/documents/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ pinned: newPinned }),
+    });
+    if (res.ok) {
+      renderView(id);
     }
   });
 }

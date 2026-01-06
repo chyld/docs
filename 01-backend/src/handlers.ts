@@ -59,7 +59,7 @@ export async function createDocument(req: Request): Promise<Response> {
   const id = randomUUID();
   await createDocDir(id);
   await writeContent(id, parsed.data.content);
-  const doc = createDoc(id, parsed.data.title, parsed.data.color);
+  const doc = createDoc(id, parsed.data.title, parsed.data.color, parsed.data.pinned);
 
   return toResponseCreated(doc);
 }
@@ -84,6 +84,7 @@ export async function updateDocument(req: BunRequest<"/api/documents/:id">): Pro
   const doc = updateDoc(id.data, {
     title: parsed.data.title,
     color: parsed.data.color,
+    pinned: parsed.data.pinned,
     touch: parsed.data.content !== undefined,
   });
 

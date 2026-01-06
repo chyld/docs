@@ -123,6 +123,12 @@ a {
   opacity: 0.8;
 }
 
+.list-control .doc-pin {
+  font-size: 0.9rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
 /* Edit Control ---------------------------------------------------------------------- */
 
 .edit-control {
