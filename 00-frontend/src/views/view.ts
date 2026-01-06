@@ -42,7 +42,14 @@ export async function renderView(id: string): Promise<void> {
   }
 
   const doc: Doc = await res.json();
-  const html = await marked(doc.content);
+
+  const renderer = new marked.Renderer();
+  renderer.link = ({ href, title, text }) => {
+    const titleAttr = title ? ` title="${title}"` : '';
+    return `<a href="${href}"${titleAttr} target="_blank" rel="noopener noreferrer">${text}</a>`;
+  };
+
+  const html = await marked(doc.content, { renderer });
 
   const formatDate = (iso: string) => {
     const d = new Date(iso);
